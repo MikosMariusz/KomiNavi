@@ -20,8 +20,11 @@
 
             <b>Punkty trasy:</b> <br>
             <i>(W celu wybrania klikni CTRL+LPM)</i> <br>
+            <input id="posredni1" class="controls" type="text" placeholder="Wprowadź dane">
+            <input id="posredni2" class="controls" type="text" placeholder="Wprowadź dane">
+            <br>
             <div multiple id="waypoints">
-                <input type="text" placeholder="Wprowadź dane">
+
                 <option value="Hala Sportowo-Widowiskowa Orbita">Hala Sportowo-Widowiskowa Orbita</option>
                 <option value="Wyższa Szkoła Bankowa we Wrocławiu">Wyższa Szkoła Bankowa we Wrocławiu</option>
                 <option value="Gliniana, Wrocław">Gliniana, Wrocław</option>
@@ -204,12 +207,17 @@
         }
 
         function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            var posrednie = [document.getElementById('posredni1').value, document.getElementById('posredni2').value];
             var waypts = [];
-            var checkboxArray = document.getElementById('waypoints');
-            for (var i = 0; i < checkboxArray.length; i++) {
-                if (checkboxArray.options[i].selected) {
+            /*waypts2.push({
+                location: document.getElementById('posredni1').value,
+                stopover: true
+            });*/
+
+            for (var i = 0; i < posrednie.length; i++) {
+                if (posrednie[i].value != 'null') {
                     waypts.push({
-                        location: checkboxArray[i].value,
+                        location: posrednie[i],
                         stopover: true
                     });
                 }
