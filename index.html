@@ -9,42 +9,46 @@
 </head>
 
 <body>
+
     <div id="map"></div>
     <div id="right-panel">
         <div>
-            <b>Start:</b>
+            <b>Początek trasy:</b>
             <select id="start">
-      <option value="Sikorskiego 7, Wrocław">Sikorskiego 7, Wrocław</option>
-      <option value="Plac Jana Pawła II">Plac Jana Pawła II</option>
-      <option value="Stadion Wrocław">Stadion Wrocław</option>
-      <option value="Domar, Wrocław">Domar, Wrocław</option>
-    </select>
+                  <option value="Sikorskiego 7, Wrocław">Sikorskiego 7, Wrocław</option>
+                  <option value="Plac Jana Pawła II, Wrocław">Plac Jana Pawła II</option>
+                  <option value="Stadion Wrocław">Stadion Wrocław</option>
+                  <option value="Domar, Wrocław">Domar, Wrocław</option>
+                </select>
             <br>
-            <b>Waypoints:</b> <br>
-            <i>(Ctrl+Click or Cmd+Click for multiple selection)</i> <br>
+
+            <b>Punkty trasy:</b> <br>
+            <i>(W celu wybrania klikni CTRL+LPM)</i> <br>
             <select multiple id="waypoints">
-      <option value="Hala Sportowo-Widowiskowa Orbita">Hala Sportowo-Widowiskowa Orbita</option>     
-      <option value="Wyższa Szkoła Bankowa we Wrocławiu">Wyższa Szkoła Bankowa we Wrocławiu</option>
-      <option value="Gliniana, Wrocław">Gliniana, Wrocław</option>
-      <option value="Plac Grunwaldzki 22, Wrocław">Plac Grunwaldzki 22, Wrocław</option>
-      <option value="Instytut Informatyki Uniwersytetu Wrocławskiego">Instytut Informatyki Uniwersytetu Wrocławskiego</option>
-      <option value="most Oławski">most Oławski</option>
-      <option value="Gabrieli Zapolskiej 4, Wrocław">Gabrieli Zapolskiej 4, Wrocław</option>
-      
-    </select>
+                  <option value="Hala Sportowo-Widowiskowa Orbita">Hala Sportowo-Widowiskowa Orbita</option>     
+                  <option value="Wyższa Szkoła Bankowa we Wrocławiu">Wyższa Szkoła Bankowa we Wrocławiu</option>
+                  <option value="Gliniana, Wrocław">Gliniana, Wrocław</option>
+                  <option value="Nad Stawem 17, Opole">Nad Stawem 17, Opole</option>
+                  <option value="Instytut Informatyki Uniwersytetu Wrocławskiego">Instytut Informatyki Uniwersytetu Wrocławskiego</option>
+                  <option value="most Oławski">most Oławski</option>
+                  <option value="Gabrieli Zapolskiej 4, Wrocław">Gabrieli Zapolskiej 4, Wrocław</option>
+                </select>
+
             <br>
-            <b>End:</b>
+            <b>Koniec trasy:</b>
             <select id="end">
-      <option value="Sobótki 2, Wrocław">Sobótki 2, Wrocław</option>
-      <option value="Krynicka 2, Wrocław">Krynicka 2, Wrocław</option>
-      <option value="ZOO Wrocław sp.z o.o.">ZOO Wrocław sp.z o.o.</option>
-      <option value="Sikorskiego 7, Wrocław">Sikorskiego 7, Wrocław</option>
-    </select>
+                  <option value="Sobótki 2, Wrocław">Sobótki 2, Wrocław</option>
+                  <option value="Krynicka 2, Wrocław">Krynicka 2, Wrocław</option>
+                  <option value="ZOO Wrocław sp.z o.o.">ZOO Wrocław sp.z o.o.</option>
+                  <option value="Sikorskiego 7, Wrocław">Sikorskiego 7, Wrocław</option>
+                </select>
+
             <br>
             <input type="submit" id="submit">
         </div>
         <div id="directions-panel"></div>
     </div>
+
     <script>
         function initMap() {
             var directionsService = new google.maps.DirectionsService;
@@ -182,9 +186,27 @@
 
             });
             directionsDisplay.setMap(map);
-
+            var geocoder = new google.maps.Geocoder();
             document.getElementById('submit').addEventListener('click', function() {
                 calculateAndDisplayRoute(directionsService, directionsDisplay);
+            });
+            document.getElementById('start').addEventListener('change', function() {
+                console.log(geocodeAddress(geocoder, function(results) {
+                    console.log(results.lat() + " " + results.lng());
+                }));
+            });
+        }
+
+        function geocodeAddress(geocoder, callback) {
+            var address = document.getElementById('start').value;
+            geocoder.geocode({
+                'address': address
+            }, function(results, status) {
+                if (status === 'OK') {
+                    callback(results[0].geometry.location);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
             });
         }
 
@@ -212,12 +234,11 @@
                     var route = response.routes[0];
                     var summaryPanel = document.getElementById('directions-panel');
                     summaryPanel.innerHTML = '';
-                    // For each route, display summary information.
                     for (var i = 0; i < route.legs.length; i++) {
                         var routeSegment = i + 1;
-                        summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+                        summaryPanel.innerHTML += '<b>Fragment trasy: ' + routeSegment +
                             '</b><br>';
-                        summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                        summaryPanel.innerHTML += route.legs[i].start_address + ' do ';
                         summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
                         summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
                     }
