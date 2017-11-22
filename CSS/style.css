@@ -6,6 +6,27 @@ body {
     padding: 0;
 }
 
+input {
+    background-color: lightgray;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
+    height: 20px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+#submit {
+    background-color: darkcyan;
+    width: 200px;
+    margin-left: 70px;
+
+}
+
 #map {
     position: absolute;
     height: 100%;
