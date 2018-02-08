@@ -1,1 +1,1 @@
-This is a project made on the Internet technologies course
+This is a project made on the Internet technologies course.
